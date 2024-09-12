@@ -9,4 +9,4 @@ receiver (unfortunately there is much less to listen today than in the
 The knob model is quite similar, but not identical, to the orginal as
 you can see on the following photo:
 
-![Original and 3D printed knobs]("img/FRG9600-SmallKnob-v2-printed.jpg" "Original and 3D printed knobs")
+![Original and 3D printed knobs](img/FRG9600-SmallKnob-v2-printed.jpg "Original and 3D printed knobs")
