@@ -26,8 +26,9 @@ In this repository you will find:
 - [The 3D model file in STL format, good for every 3D printer](3dmodel/FRG9600-SmallKnob-v2.stl)
   for the knob to be inserted on top of the original cap
 - [The 3D model file for the Bambu Lab A1 printer](3dmodel/FRG9600-SmallKnob-v2-nocap.3mf)
-  for the knob to be inserted on top of the original cap
+  for the knob to be inserted directly on the shaft.
 - [The 3D model file in STL format, good for every 3D printer](3dmodel/FRG9600-SmallKnob-v2-nocap.stl)
-  for the knob to be inserted on top of the original cap
+  for the knob to be inserted directly on the shaft.
+
 
 
