@@ -1,25 +1,27 @@
 $fn=200;
 
-////extdiam=10.5;               // external diameter
-//extdiam=11.5;               // external diameter
-//intdiam1=9.9;               // internal diameter
-//intdiam2=8.4;               // internal diameter
-//extheight=10.7;             // external height
-//intheight1=3;             // internal height
-//intheight2=6;             // may be 5 is better and may be extheight must be reduced
-//intheight = intheight1 + intheight2;
+
+// la manopola montata adesso (13 set 2024) risulta avere un diametro di 1mm maggiore
+// della manopola originale, si potrebbe procedere a:
+// ridurre extdiam  = 10.5
+// ridurre intdiam1 =  9.7
+// è anche più lungo per cui
+// ridurre intheight2=5.3
+// si potrebbe anche stampare in due pezzi:
+//  - la manopola senza il tappo
+//  - il tappo a parte ma forse non da nessun vantaggio
+
 gdiam=1;
+texHeight=0.3;  // Texture Height
 
-//extdiam=10.5;               // external diameter
-extdiam=11.5;               // external diameter
-intdiam1=9.9;               // internal diameter
-intdiam2=8.4;               // internal diameter
-extheight=9.5;             // external height
-intheight1=3;             // internal height
-intheight2=5.8;             // may be 5 is better and may be extheight must be reduced
+clearance=0.2;
+extdiam=10.7 - texHeight;   // external diameter was 11.5 - 10.7
+intdiam1=9.0 + clearance;   // internal diameter was 9.9
+intdiam2=8.0 + clearance;   // internal diameter was 8.4
+intheight1=2.5 + clearance;   // internal height
+intheight2=5.7 + clearance;   // was 5.8
 intheight = intheight1 + intheight2;
-
-
+extheight = intheight + 0.75;  // external height was 9.5
 
 xystepdiam=0.4;
 xystepdeg=15;
@@ -29,7 +31,7 @@ markh=0.2;
 
 zsteps = 7;             // number of notches in the vertical direction
 
-topscale = 0.78;        // reduction factor for the top knob diameter
+topscale = 0.83;        // reduction factor for the top knob diameter was 7.8
 
 module knob_top(diam, height, zposition)
 {
@@ -225,26 +227,40 @@ module hgroovescut()
 }
                
 
-// knob_grooves();
+//--- Start of main program
+include <../BOSL2/std.scad>
+//path = glued_circles(r=15, spread=40, tangent=45);
+//vnf = linear_sweep(
+//    path, h=40, texture="trunc_pyramids", tex_size=[5,5],
+//    tex_depth=1, style="convex");
+//vnf_polyhedron(vnf, convexity=10);
 
-//knob_round_footprint1(extdiam,intdiam1);
-//knob_round_footprint2(extdiam,intdiam2,gdiam);
-//knob_grooves_footprint(xystepdeg, extdiam, xystepdiam);
+path = circle(extdiam/2);
+vnf = linear_sweep(
+    path, h=intheight, texture="trunc_pyramids", tex_size=[intheight/zsteps,intheight/zsteps],
+    tex_depth=texHeight, style="convex");
 
-//hgroovescut();
-
-difference()
-{
-    knob_zgrooves();
-    hgroovescut();
+pathgroove = circle(gdiam/2);
+vnfgroove  = linear_sweep(pathgroove, h=intheight + 2);
+pathint1 = circle(intdiam1/2);
+vnfint1  = linear_sweep(pathint1, h=intheight1+ 1);
+pathint2 = circle(intdiam2/2);
+vnfint2  = linear_sweep(pathint2, h=intheight + 2);
+difference() {
+    translate([0, 0, intheight/2]) vnf_polyhedron(vnf, convexity=10);
+    translate([0, 0, -1])          vnf_polyhedron(vnfint2, convexity=10);
+    translate([0, 0, -1])          vnf_polyhedron(vnfint1, convexity=10);
+    translate([intdiam2/2, 0, -1])          vnf_polyhedron(vnfgroove, convexity=10);
 }
-//vsmooth(intheight/zsteps*2);
 
+//translate([20,0,0])
+//difference()
+//{
+//    knob_zgrooves();
+//    hgroovescut();
+//}
+
+//translate([20,0,0])
+knob_top(extdiam, extheight-intheight1-intheight2, intheight1+intheight2);
 knob_mark(markw, extdiam / 2, extheight - intheight1 - intheight2, intheight1+intheight2);
 
-
-
-
-    
-//knob_grooves();
-//knob_mark(markw, extdiam / 2, extheight - intheight, intheight);
