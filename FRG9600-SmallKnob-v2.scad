@@ -16,8 +16,8 @@ texHeight=0.3;  // Texture Height
 
 clearance=0.2;
 extdiam=10.7 - texHeight;   // external diameter was 11.5 - 10.7
-intdiam1=9.0 + clearance;   // internal diameter was 9.9
-intdiam2=8.0 + clearance;   // internal diameter was 8.4
+intdiam1=6.0 + clearance;   // internal diameter was 9.9 - 9
+intdiam2=6.0 + clearance;   // internal diameter was 8.4 - 8.0
 intheight1=2.5 + clearance;   // internal height
 intheight2=5.7 + clearance;   // was 5.8
 intheight = intheight1 + intheight2;
@@ -227,6 +227,21 @@ module hgroovescut()
 }
                
 
+//----- Create a Shaft
+
+// Shaft parameters
+shaft_diameter = 10;
+shaft_length = 50;
+
+// Gear teeth parameters
+tooth_width = 2;
+tooth_height = 3;
+tooth_depth = 5;
+number_of_teeth = 10;
+
+
+
+
 //--- Start of main program
 include <../BOSL2/std.scad>
 //path = glued_circles(r=15, spread=40, tangent=45);
@@ -240,8 +255,11 @@ vnf = linear_sweep(
     path, h=intheight, texture="trunc_pyramids", tex_size=[intheight/zsteps,intheight/zsteps],
     tex_depth=texHeight, style="convex");
 
+nteeths = 9;
 pathgroove = circle(gdiam/2);
-vnfgroove  = linear_sweep(pathgroove, h=intheight + 2);
+vnfgroove  = linear_sweep(pathgroove, h=intheight);
+pathgroove2 = circle(gdiam/2/2);
+vnfgroove2  = linear_sweep(pathgroove2, h=intheight);
 pathint1 = circle(intdiam1/2);
 vnfint1  = linear_sweep(pathint1, h=intheight1+ 1);
 pathint2 = circle(intdiam2/2);
@@ -250,7 +268,14 @@ difference() {
     translate([0, 0, intheight/2]) vnf_polyhedron(vnf, convexity=10);
     translate([0, 0, -1])          vnf_polyhedron(vnfint2, convexity=10);
     translate([0, 0, -1])          vnf_polyhedron(vnfint1, convexity=10);
-    translate([intdiam2/2, 0, -1])          vnf_polyhedron(vnfgroove, convexity=10);
+//    translate([intdiam2/2, 0, -1])          vnf_polyhedron(vnfgroove, convexity=10);
+}
+translate([intdiam2/2, 0, 0])          vnf_polyhedron(vnfgroove, convexity=10);
+
+for(iteeth =[360/nteeths : 360/nteeths : 360-1]) {
+    color("red")
+    rotate([0, 0, iteeth])
+    translate([intdiam2/2, 0, 0])  vnf_polyhedron(vnfgroove2, convexity=10);
 }
 
 //translate([20,0,0])
@@ -263,4 +288,5 @@ difference() {
 //translate([20,0,0])
 knob_top(extdiam, extheight-intheight1-intheight2, intheight1+intheight2);
 knob_mark(markw, extdiam / 2, extheight - intheight1 - intheight2, intheight1+intheight2);
+
 
