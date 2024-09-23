@@ -77,7 +77,7 @@ difference() {
 }
 
 if (noCap == 1) {
-    translate([intdiam2/2, 0, 0])          vnf_polyhedron(vnfgroove, convexity=10);
+    color("red") translate([intdiam2/2, 0, 0])          vnf_polyhedron(vnfgroove, convexity=10);
 
     for(iteeth =[360/nteeths : 360/nteeths : 360-1]) {
         color("red")
