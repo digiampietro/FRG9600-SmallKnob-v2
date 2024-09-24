@@ -21,7 +21,7 @@ markw=1.2;                              // red mark width
 
 zsteps = 7;             // number of notches in the vertical direction
 topscale = 0.83;        // reduction factor for the top knob diameter vs base
-nteeths = 9;            // number of theets in the shaft, including the missing teeth at zero position
+nteeths = 18;            // number of theets in the shaft, including the missing teeth at zero and 180° position
 
 // draw the knob top
 module knob_top(diam, height, zposition)
@@ -77,7 +77,8 @@ difference() {
 }
 
 if (noCap == 1) {
-    color("red") translate([intdiam2/2, 0, 0])          vnf_polyhedron(vnfgroove, convexity=10);
+    color("red") translate([ intdiam2/2, 0, 0]) vnf_polyhedron(vnfgroove, convexity=10);
+    color("red") translate([-intdiam2/2, 0, 0]) vnf_polyhedron(vnfgroove, convexity=10);
 
     for(iteeth =[360/nteeths : 360/nteeths : 360-1]) {
         color("red")
