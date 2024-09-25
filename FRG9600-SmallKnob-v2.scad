@@ -5,9 +5,9 @@ include <../BOSL2/std.scad>
 
 noCap=1;        // =0 knob on top of the original cap; =1 knob directly on the shaft
 
-gdiam=1;        // groove diameter, of the "largest" groove on the "zero" position
-texHeight=0.3;  // Texture Height
-clearance=0.2;  // clearance to use to avoid interference
+gdiam=1+0.1*noCap;  // groove diameter, of the "largest" groove on the "zero" position
+texHeight=0.3;      // Texture Height
+clearance=0.2;      // clearance to use to avoid interference
 
 extdiam=10.7 - texHeight;               // external diameter
 intdiam1=6.0 + clearance + 3*(1-noCap); // internal diameter near the shaft
@@ -77,17 +77,22 @@ difference() {
 }
 
 if (noCap == 1) {
-    color("red") translate([ intdiam2/2, 0, 0]) vnf_polyhedron(vnfgroove, convexity=10);
-    color("red") translate([-intdiam2/2, 0, 0]) vnf_polyhedron(vnfgroove, convexity=10);
+    color("green") translate([ intdiam2/2, 0, 0]) vnf_polyhedron(vnfgroove, convexity=10);
+    color("green") translate([-intdiam2/2, 0, 0]) vnf_polyhedron(vnfgroove, convexity=10);
 
     for(iteeth =[360/nteeths : 360/nteeths : 360-1]) {
-        color("red")
+        color("green")
         rotate([0, 0, iteeth])
         translate([intdiam2/2, 0, 0])  vnf_polyhedron(vnfgroove2, convexity=10);
     }
 }
 
 knob_top(extdiam, extheight-intheight1-intheight2, intheight1+intheight2);
-knob_mark(markw, extdiam / 2, extheight - intheight1 - intheight2, intheight1+intheight2);
+if (noCap == 1) {
+    rotate([0, 0, 60])
+    knob_mark(markw, extdiam / 2, extheight - intheight1 - intheight2, intheight1+intheight2);
+} else {
+    knob_mark(markw, extdiam / 2, extheight - intheight1 - intheight2, intheight1+intheight2);
+}
 
 
